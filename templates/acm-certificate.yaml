@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'ACM SSL Certificate for CloudFront (us-east-1)'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: production
+    Description: 'Environment name (production/staging)'
+  
+  DomainName:
+    Type: String
+    Description: 'Domain name'
+  
+  SubDomainName:
+    Type: String
+    Description: 'Subdomain name'
+  
+  HostedZoneId:
+    Type: String
+    Description: 'Route53 Hosted Zone ID'
+
+Resources:
+  # SSL Certificate (us-east-1 for CloudFront)
+  SSLCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Sub '${SubDomainName}.${DomainName}'
+      ValidationMethod: DNS
+      DomainValidationOptions:
+        - DomainName: !Sub '${SubDomainName}.${DomainName}'
+          HostedZoneId: !Ref HostedZoneId
+    Metadata:
+      AWS::CloudFormation::Designer:
+        id: ssl-certificate
+
+Outputs:
+  CertificateArn:
+    Description: 'SSL Certificate ARN'
+    Value: !Ref SSLCertificate
+    Export:
+      Name: !Sub 'stamp-collection-certificate-${Environment}-CertificateArn'
+  
+  DomainName:
+    Description: 'Certificate Domain Name'
+    Value: !Sub '${SubDomainName}.${DomainName}'
+    Export:
+      Name: !Sub 'stamp-collection-certificate-${Environment}-DomainName' 
