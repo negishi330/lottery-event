@@ -1,0 +1,10 @@
+version: 2
+updates:
+  # 現状は依存ファイルなし。依存を追加したら該当 ecosystem を追記する
+  # （例: pip / npm / bundler / terraform / docker）
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 3
